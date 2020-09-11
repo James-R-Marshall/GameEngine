@@ -1,9 +1,23 @@
 #pragma once
 #include "ModifiedWindow.h"
+#include "TrillionException.h"
 
 
 class Window
 {
+public: class Exception : public TrillionException
+{
+public: 
+	Exception(int line, const char* file, HRESULT hr) noexcept;
+	const char* what() const noexcept override;
+	virtual const char* GetType() const noexcept override;
+	static std::string TranslateErrorCode(HRESULT hr) noexcept;
+	HRESULT GetErrorCode() const noexcept;
+	std::string GetErrorString() const noexcept;
+private:
+	HRESULT hr;
+};
+	 
 private:
 	// singleton manages registration/cleanup of window class
 	class WindowClass
@@ -16,7 +30,7 @@ private:
 		~WindowClass();
 		WindowClass(const WindowClass&) = delete;
 		WindowClass& operator=(const WindowClass&) = delete;
-		static constexpr const char* WndClassName = "Chili Direct3D Engine Window";
+		static constexpr const char* WndClassName = "Window";
 		static WindowClass wndClass;
 		HINSTANCE hInst;
 	};
@@ -34,3 +48,8 @@ private:
 	int height;
 	HWND hWnd;
 };
+
+
+// macro so I do not have to define this long line again
+#define TRIWND_EXCEPT( hr ) Window::Exception( __LINE__,__FILE__,hr )
+#define TRIWND_LAST_EXCEPT() Window::Exception( __LINE__,__FILE__,GetLastError() )

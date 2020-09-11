@@ -7,19 +7,34 @@ int CALLBACK WinMain(
 	int nCmdShow
 )
 {
-	Window wnd(800, 300, "Window");
-	Window wnd2(300, 800, "Window2");
-	MSG msg;
-	BOOL gResult;
-	while ((gResult = GetMessage(&msg,nullptr,0,0)) > 0)
-	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-	if (gResult == -1)
-	{
-		return -1;
-	}
+	try {
+		Window wnd(800, 300, "Window");
+		MSG msg;
+		BOOL gResult;
+		while ((gResult = GetMessage(&msg, nullptr, 0, 0)) > 0)
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		if (gResult == -1)
+		{
+			return -1;
+		}
 
-	return msg.wParam;
+		return msg.wParam;
+	}
+		catch (const TrillionException& e)
+		{
+			MessageBox(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION);
+		}
+		catch (const std::exception& e)
+		{
+			MessageBox(nullptr, e.what(), "Standard Exception", MB_OK | MB_ICONEXCLAMATION);
+		}
+
+		catch (...)
+		{
+			MessageBox(nullptr, "No details available", "Unknown Exception", MB_OK | MB_ICONEXCLAMATION);
+		}
+		return -1;
 }
