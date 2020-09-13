@@ -1,6 +1,7 @@
 #pragma once
 #include "ModifiedWindow.h"
 #include "TrillionException.h"
+#include "Keyboard.h"
 
 
 class Window
@@ -47,6 +48,8 @@ private:
 	int width;
 	int height;
 	HWND hWnd;
+public: 
+	Keyboard kbd;
 };
 
 

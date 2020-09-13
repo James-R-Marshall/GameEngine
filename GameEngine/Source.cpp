@@ -15,6 +15,10 @@ int CALLBACK WinMain(
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+			if (wnd.kbd.KeyIsPressed(VK_MENU))
+			{
+				MessageBox(nullptr, "Something happened", "Space key was pressed", 0);
+			}
 		}
 		if (gResult == -1)
 		{
@@ -34,7 +38,8 @@ int CALLBACK WinMain(
 
 		catch (...)
 		{
-			MessageBox(nullptr, "No details available", "Unknown Exception", MB_OK | MB_ICONEXCLAMATION);
+			MessageBox(nullptr, "No details available", "Unknown Exception", MB_OK | 
+				MB_ICONEXCLAMATION);
 		}
 		return -1;
 }
