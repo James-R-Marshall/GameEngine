@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TrillionException.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -168,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="ModifiedWindow.h" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="TrillionException.h" />
     <ClInclude Include="Window.h" />
