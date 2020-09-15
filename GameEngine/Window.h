@@ -2,6 +2,7 @@
 #include "ModifiedWindow.h"
 #include "TrillionException.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 
 class Window
@@ -40,6 +41,9 @@ public:
 	~Window();
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
+	void SetTitle(const std::string title);
+	int getWidth() { return width; }
+	int getHeight() { return height; }
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
@@ -50,6 +54,7 @@ private:
 	HWND hWnd;
 public: 
 	Keyboard kbd;
+	Mouse mouse;
 };
 
 

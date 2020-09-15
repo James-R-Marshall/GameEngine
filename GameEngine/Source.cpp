@@ -1,4 +1,5 @@
 #include "Window.h"
+#include <sstream>
 
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
@@ -15,10 +16,6 @@ int CALLBACK WinMain(
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-			if (wnd.kbd.KeyIsPressed(VK_MENU))
-			{
-				MessageBox(nullptr, "Something happened", "Space key was pressed", 0);
-			}
 		}
 		if (gResult == -1)
 		{
