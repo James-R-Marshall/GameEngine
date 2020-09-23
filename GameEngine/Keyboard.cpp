@@ -31,9 +31,13 @@ void Keyboard::FlushKey() noexcept
 
 char Keyboard::ReadChar() noexcept
 {
+	if (!charbuffer.empty())
+	{
 	unsigned char charcode = charbuffer.front();
 	charbuffer.pop();
 	return charcode;
+	}
+	return '0';
 }
 
 bool Keyboard::CharIsEmpty() const noexcept

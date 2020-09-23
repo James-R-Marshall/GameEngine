@@ -67,6 +67,8 @@ Window::Window(int width, int height, const char* name) noexcept
 	}
 	// show Window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
+	// create graphics object
+	pGFX = std::make_unique<Graphics>(hWnd);
 }
 
 Window::~Window()
@@ -74,10 +76,39 @@ Window::~Window()
 	DestroyWindow(hWnd);
 }
 
+
+
 void Window::SetTitle(const std::string title)
 {
 	if (!SetWindowText(hWnd, title.c_str()))
 		throw TRIWND_LAST_EXCEPT();
+}
+
+std::optional<int> Window::ProcessMessages() noexcept
+{
+	MSG msg;
+	// while queue has messages, remove and dispatch them (but do not block on empty queue)
+	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+	{
+		// check for quit because peekmessage does not signal this via return val
+		if (msg.message == WM_QUIT)
+		{
+			// return optional wrapping int (arg to PostQuitMessage is in wparam) signals quit
+			return (int)msg.wParam;
+		}
+
+		// TranslateMessage will post auxilliary WM_CHAR messages from key msgs
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	// return empty optional when not quitting app
+	return {};
+}
+
+Graphics& Window::GFX()
+{
+	return* pGFX;
 }
 
 LRESULT Window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
@@ -197,27 +228,27 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-Window::Exception::Exception(int line, const char* file, HRESULT hr) noexcept
-	:TrillionException(line, file),
+Window::HrException::HrException(int line, const char* file, HRESULT hr) noexcept
+	:
+	Exception(line, file),
 	hr(hr)
 {}
 
-const char* Window::Exception::what() const noexcept
+const char* Window::HrException::what() const noexcept
 {
 	std::ostringstream oss;
 	oss << GetType() << std::endl
-		<< "[Error Code] " << GetErrorCode() << std::endl
-		<< "[Description] " << GetErrorString() << std::endl
+		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
+		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
+		<< "[Description] " << GetErrorDescription() << std::endl
 		<< GetOrginString();
 	whatBuffer = oss.str();
 	return whatBuffer.c_str();
 }
-
-const char* Window::Exception::GetType() const noexcept
+const char* Window::HrException::GetType() const noexcept
 {
-	return "Trillion Window Exception";
+	return "Chili Window Exception";
 }
-
 std::string Window::Exception::TranslateErrorCode(HRESULT hr) noexcept
 {
 	char* pMsgBuf = nullptr;
@@ -235,12 +266,16 @@ std::string Window::Exception::TranslateErrorCode(HRESULT hr) noexcept
 	return errorString;
 }
 
-HRESULT Window::Exception::GetErrorCode() const noexcept
+const char* Window::NoGfxException::GetType() const noexcept
 {
-	return hr;
+	return "Trillion Window Exception [No Graphics]";
+}
+std::string Window::HrException::GetErrorDescription() const noexcept
+{
+	return Exception::TranslateErrorCode(hr);
 }
 
-std::string Window::Exception::GetErrorString() const noexcept
+HRESULT Window::HrException::GetErrorCode() const noexcept
 {
-	return TranslateErrorCode(hr);
+	return hr;
 }
