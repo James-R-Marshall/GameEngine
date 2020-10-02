@@ -247,7 +247,7 @@ const char* Window::HrException::what() const noexcept
 }
 const char* Window::HrException::GetType() const noexcept
 {
-	return "Chili Window Exception";
+	return "Trillion Window Exception";
 }
 std::string Window::Exception::TranslateErrorCode(HRESULT hr) noexcept
 {
