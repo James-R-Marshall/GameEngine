@@ -16,6 +16,9 @@
     <Filter Include="OldStuff">
       <UniqueIdentifier>{4d846f70-7892-41da-b0ee-9b5f44b865fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{b1a48d02-26da-42df-b198-2d72bcbd25c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModifiedWindow.h">
@@ -101,5 +104,10 @@
     <None Include="DXTrace.inl" />
     <None Include="DXGetErrorDescription.inl" />
     <None Include="DXGetErrorString.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Triangle.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
